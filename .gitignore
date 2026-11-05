@@ -1,0 +1,38 @@
+# Secrets
+.env
+.env.*
+!.env.example
+!**/.env.*.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies and build output
+**/vendor/
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+
+# Laravel runtime
+backend/storage/framework/cache/**
+backend/storage/framework/sessions/**
+backend/storage/framework/views/**
+backend/storage/logs/**
+backend/bootstrap/cache/*.php
+
+# Local editor/OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Keep example env templates
+!**/.env.example
+!**/.env.*.example
+!backend/storage/framework/cache/data/.gitignore
+!backend/storage/framework/sessions/.gitignore
+!backend/storage/framework/views/.gitignore
+!backend/storage/logs/.gitignore
+!backend/storage/app/private/.gitignore
+!backend/storage/app/public/.gitignore
