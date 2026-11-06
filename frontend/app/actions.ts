@@ -5,6 +5,8 @@ import { adminRequest, clearAdminToken, clearStudentToken, readAdminToken, readS
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
+import type { PlannerActionState, PlannerInput, PlannerResult } from '@/lib/planner-types';
+
 function rawValue(formData: FormData, key: string): string {
   const entry = formData.get(key);
   return typeof entry === 'string' ? entry : '';
@@ -184,7 +186,7 @@ export type PlannerActionState = {
   error?: string;
 };
 
-export async function generatePlannerPreview(_previous: PlannerActionState, formData: FormData): Promise<PlannerActionState> {
+/*export async function generatePlannerPreview(_previous: PlannerActionState, formData: FormData): Promise<PlannerActionState> {
   const maxCredits = Number(textValue(formData, 'max_credits'));
   const maxPeriods = Number(textValue(formData, 'max_periods'));
   if (!Number.isInteger(maxCredits) || maxCredits < 10 || maxCredits > 40 || !Number.isInteger(maxPeriods) || maxPeriods < 1 || maxPeriods > 12) {
@@ -195,6 +197,59 @@ export async function generatePlannerPreview(_previous: PlannerActionState, form
     const result = await fetchPlannerPreview<{
       data: NonNullable<PlannerActionState['data']>;
     }>(maxCredits, maxPeriods);
+    return { data: result.data };
+  } catch (error) {
+    if (error instanceof BackendError && (error.status === 401 || error.status === 403)) {
+      await clearStudentToken();
+      redirect('/login?error=session');
+    }
+    return { error: error instanceof Error ? error.message : 'No se pudo generar la planeación.' };
+  }
+}*/
+
+const SUBJECT_CODE = /^[A-Z]{3}-\d{4}$/;
+
+function boundedInt(value: unknown, min: number, max: number): number | null {
+  const number = Number(value);
+  return Number.isInteger(number) && number >= min && number <= max ? number : null;
+}
+
+function sanitizePlannerInput(input: PlannerInput): PlannerInput {
+  const code = (value: unknown) => String(value ?? '').trim().toUpperCase();
+
+  const summer = (input?.summer ?? []).flatMap((item) => {
+    const c = code(item?.code);
+    const after = boundedInt(item?.after, 1, 8);
+    return SUBJECT_CODE.test(c) && after !== null ? [{ code: c, after }] : [];
+  }).slice(0, 6);
+
+  const deferred = (input?.deferred ?? []).flatMap((item) => {
+    const c = code(item?.code);
+    const periods = boundedInt(item?.periods, 1, 4);
+    return SUBJECT_CODE.test(c) && periods !== null ? [{ code: c, periods }] : [];
+  }).slice(0, 6);
+
+  const leave = Array.from(new Set((input?.leave ?? []).flatMap((value) => {
+    const n = boundedInt(value, 1, 8);
+    return n !== null ? [n] : [];
+  }))).slice(0, 6);
+
+  const fail = Array.from(new Set((input?.fail ?? []).map(code).filter((c) => SUBJECT_CODE.test(c)))).slice(0, 5);
+
+  return { summer, deferred, leave, fail };
+}
+
+export async function generatePlannerPreview(input: PlannerInput): Promise<PlannerActionState> {
+  const body = sanitizePlannerInput(input);
+  const token = await readStudentToken();
+  if (!token) redirect('/login?error=session');
+
+  try {
+    const result = await callLaravel<{ data: PlannerResult }>('student/planner/preview', {
+      method: 'POST',
+      session: token,
+      body,
+    });
     return { data: result.data };
   } catch (error) {
     if (error instanceof BackendError && (error.status === 401 || error.status === 403)) {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Subject extends Model
 {
-    protected $fillable = [
+    /*protected $fillable = [
         'code',
         'name',
         'credits',
@@ -18,7 +18,25 @@ class Subject extends Model
         'is_specialty',
         'min_credit_percent',
         'active',
+    ];*/
+    protected $fillable = [
+    'code', 'name', 'credits', 'theory_hours', 'practice_hours', 'suggested_semester',
+    'difficulty', 'is_specialty', 'min_credit_percent', 'active',
     ];
+
+    /*protected function casts(): array
+    {
+        return [
+            'credits' => 'integer',
+            'theory_hours' => 'integer',
+            'practice_hours' => 'integer',
+            'suggested_semester' => 'integer',
+            'difficulty' => 'integer',
+            'is_specialty' => 'boolean',
+            'min_credit_percent' => 'decimal:2',
+            'active' => 'boolean',
+        ];
+    }*/
 
     protected function casts(): array
     {
@@ -29,7 +47,7 @@ class Subject extends Model
             'suggested_semester' => 'integer',
             'difficulty' => 'integer',
             'is_specialty' => 'boolean',
-            'min_credit_percent' => 'decimal:2',
+            'min_credit_percent' => 'float',
             'active' => 'boolean',
         ];
     }
