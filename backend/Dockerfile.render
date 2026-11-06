@@ -1,0 +1,66 @@
+# Imagen de producción para Render.
+# El Dockerfile local de Docker Compose permanece separado.
+
+FROM php:8.4-cli AS vendor
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libpq-dev \
+        libzip-dev \
+        libonig-dev \
+        unzip \
+    && docker-php-ext-install -j"$(nproc)" pdo_pgsql pgsql mbstring zip \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+
+# Primero copiamos únicamente los manifiestos para aprovechar la caché de Docker.
+COPY composer.json composer.lock ./
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --no-progress \
+    --no-scripts
+
+# Después copiamos la aplicación y generamos el autoload de producción.
+COPY . .
+
+RUN mkdir -p \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/framework/views \
+        storage/logs \
+        bootstrap/cache \
+    && composer dump-autoload --no-dev --optimize --no-scripts \
+    && php artisan package:discover --ansi
+
+FROM php:8.4-apache AS runtime
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libpq-dev \
+        libzip-dev \
+        libonig-dev \
+    && docker-php-ext-install -j"$(nproc)" pdo_pgsql pgsql mbstring zip \
+    && a2enmod rewrite headers \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+WORKDIR /var/www/html
+COPY --from=vendor /app /var/www/html
+
+RUN mkdir -p \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/framework/views \
+        storage/logs \
+        bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R ug+rwx storage bootstrap/cache
+
+EXPOSE 80
+CMD ["apache2-foreground"]
