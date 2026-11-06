@@ -166,6 +166,3 @@ La migración habilita RLS en las tablas de la aplicación y no crea políticas 
 - Vercel y Render no comparten la red privada de Docker Compose. En producción, la URL de Laravel debe ser alcanzable por el servidor de Next.js y estar protegida por HTTPS, firma HMAC, rate limiting y reglas de red disponibles en el proveedor.
 - No despliegues esta aplicación con `APP_DEBUG=true`. Mantén `APP_DEBUG=false` y rota ambos secretos si sospechas que fueron expuestos. En un despliegue Next.js autogestionado con varias réplicas, configura además una `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` persistente y compartida entre instancias; Vercel administra ese aspecto por ti.
 
-## Límites que requieren configuración institucional
-
-El catálogo de materias, los prerrequisitos/correquisitos, las reglas de créditos, la periodicidad y la oferta de grupos deben cargarse y validarse con el plan de estudios oficial de ISC del ITCelaya. No se incluyen materias ficticias ni se infiere una trayectoria oficial a partir de las calificaciones. La estimación es orientativa y depende de que el catálogo esté completo.
