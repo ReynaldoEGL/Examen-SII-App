@@ -174,7 +174,7 @@ export async function importSubjectsCsv(formData: FormData): Promise<void> {
   redirect('/admin?status=imported');
 }
 
-export type PlannerActionState = {
+/*export type PlannerActionState = {
   data?: {
     periods: Array<{ number: number; label: string; total_credits: number; subjects: Array<{ code: string; name: string; credits: number; suggested_semester: number; difficulty: number }> }>;
     warnings: string[];
@@ -184,7 +184,7 @@ export type PlannerActionState = {
     unassigned_subjects?: Array<{ code: string; name: string }>;
   };
   error?: string;
-};
+};*/
 
 /*export async function generatePlannerPreview(_previous: PlannerActionState, formData: FormData): Promise<PlannerActionState> {
   const maxCredits = Number(textValue(formData, 'max_credits'));
