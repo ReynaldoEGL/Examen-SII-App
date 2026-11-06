@@ -17,11 +17,14 @@ class AdminAuthController
             'password' => ['required', 'string', 'max:1024'],
         ]);
 
-        $admin = Admin::query()->where('email', $credentials['email'])->where('active', true)->first();
+        // La restricción SQL es única sobre lower(email); normalizamos también
+        // la búsqueda para que el comportamiento coincida con el índice.
+        $email = mb_strtolower(trim($credentials['email']));
+        $admin = Admin::query()->where('email', $email)->where('active', true)->first();
 
-        // Ejecuta una verificación incluso cuando el correo no existe para reducir diferencias temporales triviales.
-        $hash = $admin?->password ?? '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
-        $valid = Hash::check($credentials['password'], $hash);
+        // Ejecuta una verificación aunque el correo no exista.
+        $dummyHash = '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+        $valid = Hash::check($credentials['password'], $admin?->password ?? $dummyHash);
 
         if (!$admin || !$valid) {
             return response()->json(['message' => 'Credenciales administrativas incorrectas.'], 422);
@@ -37,6 +40,8 @@ class AdminAuthController
             'sii_token' => null,
             'expires_at' => $expiresAt,
         ]);
+
+        $admin->forceFill(['last_login_at' => now()])->save();
 
         return response()->json([
             'session_token' => $plainSessionToken,

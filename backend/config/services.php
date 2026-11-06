@@ -8,6 +8,8 @@ return [
     'internal' => [
         'shared_secret' => env('INTERNAL_SHARED_SECRET'),
     ],
+    // Secreto exclusivo de Laravel. No compartir con Next.js ni con el SII.
+    'pseudonym_key' => env('PSEUDONYM_KEY'),
     'admin_initial' => [
         'email' => env('ADMIN_INITIAL_EMAIL'),
         'password' => env('ADMIN_INITIAL_PASSWORD'),

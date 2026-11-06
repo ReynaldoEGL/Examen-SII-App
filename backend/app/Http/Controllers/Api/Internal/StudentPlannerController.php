@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Internal;
 
 use App\Models\AppSession;
-use App\Models\PlanningScenario;
 use App\Services\AcademicPlannerService;
 use App\Services\SiiService;
 use App\Services\SiiTokenExpiredException;
@@ -22,6 +21,9 @@ class StudentPlannerController
 
     public function preview(Request $request): JsonResponse
     {
+        // La selección de max_credits se conserva solo durante esta primera
+        // entrega para no romper aún el formulario. En la siguiente etapa se
+        // quitará del cliente y se resolverá exclusivamente desde load_rules.
         $params = $request->validate([
             'max_credits' => ['required', 'integer', 'between:10,40'],
             'max_periods' => ['sometimes', 'integer', 'between:1,12'],
@@ -41,18 +43,14 @@ class StudentPlannerController
             return response()->json(['message' => 'No fue posible consultar el historial institucional.'], 503);
         }
 
+        // No se persisten parámetros, resultados ni identificadores del alumno.
+        // Cada simulación se reconstruye con los datos institucionales actuales.
         $result = $this->planner->preview(
             $kardex,
             $grades,
             (int) $params['max_credits'],
             (int) ($params['max_periods'] ?? 8),
         );
-
-        PlanningScenario::query()->create([
-            'student_number' => $session->principal_id,
-            'parameters' => $params,
-            'result' => $result,
-        ]);
 
         return response()->json(['data' => $result]);
     }
