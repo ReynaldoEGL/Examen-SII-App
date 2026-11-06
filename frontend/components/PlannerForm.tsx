@@ -203,7 +203,7 @@ export default function PlannerForm() {
           <div className="panel loading-state" role="status">
             <div className="loading-spinner" />
             <strong>Calculando tu trayectoria…</strong>
-            <p>Consultamos tu kardex y tu horario en el SII.</p>
+            
           </div>
         ) : (
           <>

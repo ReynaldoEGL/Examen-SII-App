@@ -23,7 +23,7 @@ export default async function KardexPage() {
   const progress = Number(response.data.porcentaje_avance ?? 0);
 
   return <>
-    <div className="page-heading"><div><p className="eyebrow">HISTORIAL</p><h1>Kardex académico</h1><p className="muted">Historial de materias registradas en el SII.</p></div><div className="heading-stat"><strong>{Number.isFinite(progress) ? progress.toFixed(2) : '—'}%</strong><span>Avance del kardex</span></div></div>
+    <div className="page-heading"><div><p className="eyebrow">HISTORIAL</p><h1>Kardex académico</h1></div><div className="heading-stat"><strong>{Number.isFinite(progress) ? progress.toFixed(2) : '—'}%</strong><span>Avance del kardex</span></div></div>
     <section className="panel table-panel">
       <div className="panel-heading"><div><h2>Materias cursadas</h2><p className="muted">{items.length} registros históricos</p></div></div>
       <div className="table-wrap"><table className="data-table">
@@ -33,6 +33,6 @@ export default async function KardexPage() {
         </tr>)}{items.length === 0 ? <tr><td colSpan={7} className="empty-state">El SII no devolvió registros del kardex.</td></tr> : null}</tbody>
       </table></div>
     </section>
-    <p className="data-note">Se muestran los registros tal como los devuelve el SII. Una materia puede aparecer varias veces cuando existe repetición; no se eliminan intentos anteriores. “AC” se conserva como valor textual.</p>
+    
   </>;
 }

@@ -45,7 +45,7 @@ export default async function DashboardPage() {
         <div>
           <p className="eyebrow">PANEL DEL ESTUDIANTE</p>
           <h1>Hola, {name.split(' ')[0].toLocaleLowerCase('es-MX').replace(/^\p{L}/u, (letter) => letter.toLocaleUpperCase('es-MX'))}</h1>
-          <p className="muted">Tu información académica sincronizada con el Sistema Integral de Información.</p>
+          <p className="muted">Información académica.</p>
         </div>
         <div className="student-ident"><span className="avatar">{initials(name)}</span><span><strong>{name}</strong><small>{profile.numero_control}</small></span></div>
       </section>
@@ -79,7 +79,7 @@ export default async function DashboardPage() {
           <Info label="Créditos complementarios" value={metric(profile.creditos_complementarios)} last />
         </article>
       </section>
-      <p className="data-note">Los datos anteriores se consultan directamente al SII en cada navegación. Los indicadores se muestran tal como los entrega el servicio institucional.</p>
+      
     </>
   );
 }

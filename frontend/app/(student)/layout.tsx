@@ -33,14 +33,14 @@ export default async function StudentLayout({ children }: Readonly<{ children: R
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <div className="secure-note"><span className="secure-dot" /> Conexión protegida</div>
+          
           <form action={logoutStudent}><button className="button button-ghost button-full" type="submit">Cerrar sesión <span aria-hidden="true">↗</span></button></form>
         </div>
       </aside>
       <main className="main-area">
         <header className="topbar">
-          <span>Portal de información académica</span>
-          <span className="topbar-status"><span className="secure-dot" /> Datos consultados al SII</span>
+          
+          
         </header>
         <div className="page-content">{children}</div>
       </main>

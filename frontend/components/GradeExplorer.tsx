@@ -55,7 +55,7 @@ export default function GradeExplorer({ rows }: { rows: GradeRow[] }) {
           </tbody>
         </table>
       </div>
-      <p className="data-note">El endpoint entrega evaluaciones parciales, no una calificación final calculada. Los campos null se muestran como pendientes. Colores orientativos: verde ≥90, ámbar 70–89, rojo menor que 70; no representan una regla institucional de evaluación.</p>
+      
     </>
   );
 }

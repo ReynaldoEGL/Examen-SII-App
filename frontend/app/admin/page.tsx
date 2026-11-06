@@ -70,7 +70,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
           </tr>)}{subjects.length === 0 ? <tr><td colSpan={8} className="empty-state">El catálogo está vacío. Carga materias oficiales antes de usar el asistente.</td></tr> : null}</tbody>
         </table></div>
       </section>
-      <p className="data-note">Solo los administradores autorizados pueden modificar el catálogo. La autorización y validación se aplican en Laravel; ocultar controles en React no sería suficiente.</p>
+      
     </div>
   </main>;
 }
