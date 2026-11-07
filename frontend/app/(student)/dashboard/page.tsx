@@ -43,7 +43,7 @@ export default async function DashboardPage() {
     <>
       <section className="welcome-row">
         <div>
-          <p className="eyebrow">PANEL DEL ESTUDIANTE</p>
+          
           <h1>Hola, {name.split(' ')[0].toLocaleLowerCase('es-MX').replace(/^\p{L}/u, (letter) => letter.toLocaleUpperCase('es-MX'))}</h1>
           <p className="muted">Información académica.</p>
         </div>
