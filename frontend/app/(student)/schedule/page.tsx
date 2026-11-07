@@ -32,7 +32,7 @@ export default async function SchedulePage() {
   })).sort((a, b) => days.findIndex((day) => day.label === a.day) - days.findIndex((day) => day.label === b.day) || a.time.localeCompare(b.time));
 
   return <>
-    <div className="page-heading"><div><p className="eyebrow">ORGANIZACIÓN</p><h1>Horario</h1><p className="muted">Tus clases registradas para el periodo actual.</p></div><div className="heading-stat"><strong>{entries.length}</strong><span>Bloques semanales</span></div></div>
+    <div className="page-heading"><div><p className="eyebrow">ORGANIZACIÓN</p><h1>Horario</h1><p className="muted">clases registradas para el periodo actual.</p></div><div className="heading-stat"><strong>{entries.length}</strong><span>Bloques semanales</span></div></div>
     <section className="schedule-grid">
       {days.map((day) => {
         const dayEntries = entries.filter((entry) => entry.day === day.label);
@@ -47,6 +47,6 @@ export default async function SchedulePage() {
         </article>;
       })}
     </section>
-    <p className="data-note">{period?.periodo?.descripcion_periodo ?? period?.periodo?.clave_periodo ?? 'Periodo no identificado'}. Los salones y bloques se presentan tal como los entrega el SII.</p>
+    <p className="data-note">{period?.periodo?.descripcion_periodo ?? period?.periodo?.clave_periodo ?? 'Periodo no identificado'}.</p>
   </>;
 }

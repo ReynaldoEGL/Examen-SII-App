@@ -51,7 +51,7 @@ export default async function DashboardPage() {
       </section>
 
       <section className="metric-grid" aria-label="Indicadores académicos">
-        <Metric label="Avance reticular" value={`${metric(profile.porcentaje_avance)}%`} detail="Según el perfil institucional" accent="blue" />
+        
         <Metric label="Créditos acumulados" value={metric(profile.creditos_acumulados)} detail="Créditos registrados" accent="violet" />
         <Metric label="Promedio ponderado" value={metric(profile.promedio_ponderado, 2)} detail="Indicador del SII" accent="green" />
         <Metric label="Semestre" value={metric(profile.semestre)} detail="Semestre reportado" accent="amber" />

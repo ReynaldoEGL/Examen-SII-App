@@ -27,7 +27,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <input id="password" name="password" type="password" autoComplete="current-password" required maxLength={1024} />
           <button className="button button-primary" type="submit">Iniciar sesión</button>
         </form>
-        <p className="fine-print">La autenticación se realiza contra el SII. La contraseña no se guarda; el JWT institucional se conserva cifrado únicamente en el servidor.</p>
         <a className="subtle-link" href="/admin/login">Acceso administrativo</a>
       </section>
     </main>
